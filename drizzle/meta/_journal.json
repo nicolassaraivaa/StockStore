@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1766857486912,
+      "tag": "0000_dazzling_blazing_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1735339525000,
+      "tag": "0001_remove_type_column",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1766859790257,
+      "tag": "0002_mute_stick",
+      "breakpoints": true
+    }
+  ]
+}
