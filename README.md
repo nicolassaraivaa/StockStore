@@ -189,7 +189,3 @@ src/
 - Variáveis que começam com `NEXT_PUBLIC_` são expostas ao cliente (browser)
 - Variáveis sem esse prefixo são apenas acessíveis no servidor
 - `DATABASE_URL` deve conter a string de conexão PostgreSQL do Supabase
-
----
-
-Desenvolvido com ❤️ por **Nicolas Saraiva**
