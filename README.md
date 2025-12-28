@@ -1,7 +1,7 @@
 # 💸 StockStore Interface
 
-**StockStore Interface** é a aplicação front-end do StockStore, responsável por fornecer uma interface intuitiva e responsiva para o gerenciamento financeiro pessoal.  
-Com ela, é possível visualizar categorias, transações, balanços e evolução financeira mensal de forma clara e prática.
+**StockStore Interface** é uma aplicação completa de gestão de estoque, responsável por fornecer uma interface intuitiva e responsiva para o controle de inventário, produtos, vendas e compras.  
+Com ela, é possível gerenciar produtos com variantes, categorias, transações (vendas e compras), visualizar dashboard com métricas, balanços financeiros e evolução mensal de forma clara e prática.
 
 ---
 
@@ -14,31 +14,51 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [TanStack Query (React Query)](https://tanstack.com/query) - Gerenciamento de estado e cache de dados
-- [Prisma](https://www.prisma.io/) - ORM para MongoDB
-- [Firebase](https://firebase.google.com/) — Autenticação (Client + Admin)
-- [React Toastify](https://fkhadra.github.io/react-toastify/introduction)
-- [Recharts](https://recharts.org/)
+- [Drizzle ORM](https://orm.drizzle.team/) - ORM para PostgreSQL
+- [Supabase](https://supabase.com/) — Banco de dados PostgreSQL e Autenticação
+- [Sonner](https://sonner.emilkowal.ski/) - Notificações toast elegantes
+- [Recharts](https://recharts.org/) - Gráficos e visualizações
 - [Zod](https://zod.dev/) - Validação de schemas
+- [Radix UI](https://www.radix-ui.com/) - Componentes de UI acessíveis
+- [React Hook Form](https://react-hook-form.com/) - Gerenciamento de formulários
+- [Lucide React](https://lucide.dev/) - Ícones modernos
+- [Day.js](https://day.js.org/) - Manipulação de datas
 
 ---
 
 ## 📌 Funcionalidades
 
+- **Produtos**
+
+  - Criar, editar e excluir produtos.
+  - Gerenciar variantes de produtos (cores e tamanhos).
+  - Controle de estoque por produto e variante.
+
 - **Categorias**
 
-  - Listar categorias existentes.
+  - Criar, editar e excluir categorias.
+  - Organizar produtos por categorias.
 
 - **Transações**
 
+  - Registrar transações de venda e compra.
   - Listar, deletar e cadastrar transações.
   - Exibir balanço financeiro (receitas, despesas e saldo).
+  - Visualizar produtos mais vendidos.
   - Visualizar evolução financeira mensal em gráficos (Recharts).
 
+- **Dashboard**
+
+  - Visão geral com receitas, lucros e gastos.
+  - Gráficos de evolução mensal.
+  - Lista de produtos mais vendidos.
+  - Filtros por período (mês atual, últimos 3/6/12 meses, todos).
+
 - **Experiência do Usuário**
-  - Autenticação via **Firebase** (configure os provedores no Console do Firebase).
-  - Notificações de feedback (sucesso/erro) com **React Toastify**.
+  - Autenticação via **Supabase Auth** (email/senha).
+  - Notificações de feedback (sucesso/erro) com **Sonner**.
   - Ícones modernos com **Lucide React**.
-  - UI responsiva com **Tailwind CSS**.
+  - UI responsiva com **Tailwind CSS** e componentes **Radix UI**.
   - Cache inteligente com **React Query**.
 
 ---
@@ -60,21 +80,12 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 3. Configure as variáveis de ambiente (.env.local):
 
    ```bash
-   # Database
-   DATABASE_URL=mongodb://localhost:27017/stockstore
+   # Database (Supabase PostgreSQL)
+   DATABASE_URL=postgresql://postgres:SUA_SENHA@db.SEU_PROJECT_ID.supabase.co:5432/postgres
 
-   # Firebase Client (Frontend)
-   NEXT_PUBLIC_FIREBASE_API_KEY=SUA_FIREBASE_API_KEY
-   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=SUA_FIREBASE_AUTH_DOMAIN
-   NEXT_PUBLIC_FIREBASE_PROJECT_ID=SUA_FIREBASE_PROJECT_ID
-   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=SUA_FIREBASE_STORAGE_BUCKET
-   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=SUA_FIREBASE_MESSAGING_SENDER_ID
-   NEXT_PUBLIC_FIREBASE_APP_ID=SUA_FIREBASE_APP_ID
-
-   # Firebase Admin (Backend)
-   FIREBASE_PROJECT_ID=SUA_FIREBASE_PROJECT_ID
-   FIREBASE_PRIVATE_KEY=SUA_FIREBASE_PRIVATE_KEY
-   FIREBASE_CLIENT_EMAIL=SUA_FIREBASE_CLIENT_EMAIL
+   # Supabase
+   NEXT_PUBLIC_SUPABASE_URL=https://SEU_PROJECT_ID.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=SUA_SUPABASE_ANON_KEY
 
    # Environment
    NODE_ENV=development
@@ -83,7 +94,7 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 4. Configure o banco de dados:
 
    ```bash
-   # Gerar cliente Prisma
+   # Gerar migrações do Drizzle
    npm run db:generate
 
    # Fazer push do schema para o banco
@@ -100,42 +111,16 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 
 ---
 
-## 📁 Estrutura do Projeto
-
-```
-src/
-├── app/                    # App Router do Next.js
-│   ├── (protected)/        # Rotas protegidas
-│   │   ├── dashboard/
-│   │   └── transacoes/
-│   ├── login/
-│   ├── layout.tsx         # Layout raiz
-│   ├── page.tsx           # Página inicial
-│   └── providers.tsx      # Providers (React Query, Auth)
-├── components/            # Componentes reutilizáveis
-├── hooks/                 # Custom hooks (React Query)
-│   ├── useTransactions.ts
-│   └── useCategories.ts
-├── context/              # Context API
-│   └── AuthContext.tsx
-├── types/                # TypeScript types
-├── utils/                # Funções utilitárias
-└── config/               # Configurações
-    └── firebase.ts
-```
-
----
-
 ## 🔄 Arquitetura
 
-Este projeto foi migrado para Next.js 15 com arquitetura unificada:
+Este projeto foi desenvolvido com Next.js 15 e arquitetura unificada:
 
 - **App Router**: Uso do novo sistema de roteamento do Next.js
 - **Server Actions**: Backend integrado como Server Actions (sem API externa)
 - **React Query**: Gerenciamento de estado e cache de dados
 - **Supabase/PostgreSQL**: Banco de dados PostgreSQL usando Drizzle ORM
-- **Firebase Admin**: Autenticação server-side com Firebase Admin SDK
-- **Monorepo**: Tudo em um único projeto (frontend + backend)
+- **Supabase Auth**: Autenticação server-side e client-side integrada
+- **Arquitetura Unificada**: Tudo em um único projeto (frontend + backend)
 
 ---
 
@@ -143,23 +128,45 @@ Este projeto foi migrado para Next.js 15 com arquitetura unificada:
 
 ```
 src/
-├── actions/           # Server Actions (Backend integrado)
-│   ├── transactions.ts
-│   └── categories.ts
-├── app/              # App Router do Next.js
-│   ├── (protected)/  # Rotas protegidas
-│   └── api/          # API Routes (auth, init)
-├── components/        # Componentes reutilizáveis
-├── hooks/            # React Query hooks
-├── lib/              # Bibliotecas e utilitários
-│   ├── db/           # Configuração do banco de dados (Supabase/PostgreSQL)
-│   │   ├── index.ts
-│   │   ├── schema.ts
-│   │   └── helpers.ts
-│   ├── firebase-admin.ts
-│   └── auth.ts
-├── types/            # TypeScript types
-└── utils/            # Funções utilitárias
+├── actions/              # Server Actions (Backend integrado)
+│   ├── transaction/      # Ações relacionadas a transações
+│   ├── category/         # Ações relacionadas a categorias
+│   ├── product/          # Ações relacionadas a produtos
+│   ├── variant/          # Ações relacionadas a variantes
+│   └── user/             # Ações relacionadas a usuários
+├── app/                  # App Router do Next.js
+│   ├── (protected)/      # Rotas protegidas
+│   │   ├── dashboard/    # Dashboard principal
+│   │   ├── categorias/   # Gerenciamento de categorias
+│   │   ├── produtos/     # Gerenciamento de produtos
+│   │   └── transacoes/   # Gerenciamento de transações
+│   ├── api/              # API Routes (auth, init, user)
+│   ├── login/            # Página de login/cadastro
+│   ├── layout.tsx        # Layout raiz
+│   ├── page.tsx          # Página inicial
+│   └── providers.tsx     # Providers (React Query, Auth)
+├── components/           # Componentes reutilizáveis
+│   └── ui/               # Componentes de UI (Radix UI)
+├── hooks/                # Custom hooks (React Query)
+│   ├── useTransactions.ts
+│   ├── useCategories.ts
+│   ├── useProducts.ts
+│   └── useVariants.ts
+├── context/              # Context API
+│   └── AuthContext.tsx   # Context de autenticação
+├── lib/                  # Bibliotecas e utilitários
+│   ├── db/               # Configuração do banco de dados
+│   │   ├── index.ts      # Cliente Drizzle
+│   │   ├── schema.ts     # Schemas do banco
+│   │   └── helpers.ts    # Funções auxiliares
+│   ├── supabase/         # Clientes Supabase
+│   │   ├── client.ts     # Cliente browser
+│   │   └── server.ts     # Cliente server
+│   ├── auth.ts           # Funções de autenticação
+│   └── utils.ts          # Utilitários gerais
+├── types/                # TypeScript types
+└── utils/                # Funções utilitárias
+    └── formatter.ts      # Formatação de dados
 ```
 
 ---
@@ -179,7 +186,9 @@ src/
 
 ## 🎨 Variáveis de Ambiente
 
-Todas as variáveis de ambiente devem começar com `NEXT_PUBLIC_` para serem acessíveis no cliente.
+- Variáveis que começam com `NEXT_PUBLIC_` são expostas ao cliente (browser)
+- Variáveis sem esse prefixo são apenas acessíveis no servidor
+- `DATABASE_URL` deve conter a string de conexão PostgreSQL do Supabase
 
 ---
 
