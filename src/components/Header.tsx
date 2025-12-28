@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
@@ -39,10 +40,13 @@ const Header = () => {
 
     if (authState.user.photoURL) {
       return (
-        <img
+        <Image
           src={authState.user.photoURL}
           alt={`Foto de perfil do(a) ${authState.user.displayName}`}
+          width={32}
+          height={32}
           className="w-8 h-8 rounded-full border border-gray-700"
+          unoptimized
         />
       );
     }
@@ -164,7 +168,7 @@ const Header = () => {
             ) : (
               <Link
                 href="/login"
-                className="block bg-primary-500 text-gray-800 font-semibold px-5 py-2.5 rounded-2xl flex items-center justify-center hover:bg-primary-600"
+                className="bg-primary-500 text-gray-800 font-semibold px-5 py-2.5 rounded-2xl flex items-center justify-center hover:bg-primary-600"
                 onClick={() => setIsOpen(false)}
               >
                 Entrar

@@ -90,7 +90,7 @@ export default function NewTransactionPage() {
         }));
       }
     }
-  }, [formData.productId, formData.variantId, variants, products]);
+  }, [formData.productId, formData.variantId, formData.unitPrice, variants, products]);
 
   const selectedProduct = products.find((p) => p.id === formData.productId);
   const selectedVariant = variants.find((v) => v.id === formData.variantId);

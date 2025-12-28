@@ -1,6 +1,5 @@
 "use client";
 
-/* eslint-disable react-refresh/only-export-components */
 import {
   createContext,
   useContext,
@@ -86,7 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, [supabase, queryClient]);
 
   const signIn = async (email: string, password: string): Promise<void> => {
     setAuthState((prev) => ({ ...prev, loading: true, erro: null }));
