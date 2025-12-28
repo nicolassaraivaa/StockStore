@@ -32,7 +32,7 @@ import { useAuth } from "@/context/AuthContext";
 const formSchema = z.object({
   email: z.string().email("E-mail inválido. Tente novamente."),
   password: z
-    .string("Senha inválida. Tente novamente.")
+    .string()
     .min(6, "A senha precisa ter pelo menos 6 caracteres."),
 });
 

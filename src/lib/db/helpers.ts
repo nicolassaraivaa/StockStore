@@ -113,23 +113,19 @@ export async function findManyCategories(filters?: {
     conditions.push(eq(categories.userId, filters.userId));
   }
 
-  let query = db.select().from(categories);
-
-  if (conditions.length > 0) {
-    query = query.where(and(...conditions));
-  }
+  const baseQuery = db.select().from(categories);
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+  const query = whereClause ? baseQuery.where(whereClause) : baseQuery;
 
   if (filters?.orderBy?.name) {
-    query = query.orderBy(
+    return await query.orderBy(
       filters.orderBy.name === "asc"
         ? asc(categories.name)
         : desc(categories.name)
     );
   } else {
-    query = query.orderBy(asc(categories.name));
+    return await query.orderBy(asc(categories.name));
   }
-
-  return await query;
 }
 
 export async function createCategory(
@@ -220,22 +216,20 @@ export async function findManyTransactions(filters: {
     conditions.push(eq(transactions.productId, filters.productId));
   }
 
-  let query = db
+  const baseQuery = db
     .select()
     .from(transactions)
     .where(and(...conditions));
 
   if (filters.orderBy?.date) {
-    query = query.orderBy(
+    return await baseQuery.orderBy(
       filters.orderBy.date === "asc"
         ? asc(transactions.date)
         : desc(transactions.date)
     );
   } else {
-    query = query.orderBy(desc(transactions.date));
+    return await baseQuery.orderBy(desc(transactions.date));
   }
-
-  return await query;
 }
 
 export async function findTransactionById(

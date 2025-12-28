@@ -34,10 +34,10 @@ const formSchema = z
     name: z.string().trim().min(1, "Nome é obrigatório."),
     email: z.string().email("E-mail inválido. Tente novamente."),
     password: z
-      .string("Senha inválida. Tente novamente.")
+      .string()
       .min(6, "A senha precisa ter pelo menos 6 caracteres."),
     passwordConfirmation: z
-      .string("Senha inválida.")
+      .string()
       .min(6, "A senha precisa ter pelo menos 6 caracteres."),
   })
   .refine(

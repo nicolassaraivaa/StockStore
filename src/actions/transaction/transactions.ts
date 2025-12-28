@@ -406,7 +406,7 @@ export async function createTransaction(data: CreateTransactionInput) {
       await db
         .update(products)
         .set({ stockQuantity: Math.max(0, newStock) })
-        .where(eq(products.id, newTransaction.productId));
+        .where(eq(products.id, transaction.productId));
     }
 
     return {

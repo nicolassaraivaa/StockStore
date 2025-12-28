@@ -75,9 +75,9 @@ interface ProductModalProps {
     description?: string | null;
     color?: string | null;
     size?: string | null;
-    costPrice: number;
-    salePrice: number;
-    stockQuantity: number;
+    costPrice: number | null;
+    salePrice: number | null;
+    stockQuantity: number | null;
   };
 }
 
@@ -124,9 +124,9 @@ export default function ProductModal({
         description: product.description || "",
         color: product.color || "",
         size: product.size || "",
-        costPrice: product.costPrice,
-        salePrice: product.salePrice,
-        stockQuantity: product.stockQuantity,
+        costPrice: product.costPrice ?? 0,
+        salePrice: product.salePrice ?? 0,
+        stockQuantity: product.stockQuantity ?? 0,
       });
       setCreatedProduct(null);
     } else if (createdProduct) {

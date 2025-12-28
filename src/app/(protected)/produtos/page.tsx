@@ -170,8 +170,8 @@ export default function ProductsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product) => {
               const margin = calculateMargin(
-                product.costPrice,
-                product.salePrice
+                product.costPrice ?? 0,
+                product.salePrice ?? 0
               );
 
               // Verificar se o estoque está zerado ou negativo
@@ -268,7 +268,7 @@ export default function ProductsPage() {
                           isLowStock ? "text-red-900" : "text-gray-900"
                         }`}
                       >
-                        {formatCurrency(product.costPrice)}
+                        {formatCurrency(product.costPrice ?? 0)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -284,7 +284,7 @@ export default function ProductsPage() {
                           isLowStock ? "text-red-900" : "text-gray-900"
                         }`}
                       >
-                        {formatCurrency(product.salePrice)}
+                        {formatCurrency(product.salePrice ?? 0)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
