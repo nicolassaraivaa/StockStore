@@ -45,6 +45,12 @@ export async function updateProductAction(
     throw new Error("Produto não encontrado");
   }
 
-  const product = await updateProduct(id, validation.data, userId);
+  // Converter null para undefined para compatibilidade com UpdateProductInput
+  const updateData: UpdateProductInput = {
+    ...validation.data,
+    description: validation.data.description ?? undefined,
+  };
+
+  const product = await updateProduct(id, updateData, userId);
   return product;
 }

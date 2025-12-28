@@ -1,7 +1,7 @@
 "use server";
 
 import { findManyCategories, findCategoryBy, createCategory } from '@/lib/db/helpers';
-import { TransactionType, type Category } from '@/lib/db/schema';
+import type { Category } from '@/lib/db/schema';
 
 export async function getCategories() {
   const categories = await findManyCategories({
@@ -11,38 +11,40 @@ export async function getCategories() {
   return categories;
 }
 
-type GlobalCategoryInput = Pick<Category, 'name' | 'color' | 'type'>;
+type GlobalCategoryInput = {
+  name: string;
+  color: string;
+};
 
 const globalCategories: GlobalCategoryInput[] = [
-  // Despesas
-  { name: 'Alimentação', color: '#FF5733', type: TransactionType.EXPENSE },
-  { name: 'Transporte', color: '#33A8FF', type: TransactionType.EXPENSE },
-  { name: 'Moradia', color: '#33FF57', type: TransactionType.EXPENSE },
-  { name: 'Saúde', color: '#F033FF', type: TransactionType.EXPENSE },
-  { name: 'Educação', color: '#FF3366', type: TransactionType.EXPENSE },
-  { name: 'Lazer', color: '#FFBA33', type: TransactionType.EXPENSE },
-  { name: 'Compra da Shein', color: '#33FFF6', type: TransactionType.EXPENSE },
-  { name: 'Outros', color: '#B033FF', type: TransactionType.EXPENSE },
-
-  // Receitas
-  { name: 'Salário', color: '#33FF57', type: TransactionType.INCOME },
-  { name: 'Venda', color: '#33A8FF', type: TransactionType.INCOME },
-  { name: 'Investimentos', color: '#FFBA33', type: TransactionType.INCOME },
-  { name: 'Outros', color: '#B033FF', type: TransactionType.INCOME },
+  { name: 'Alimentação', color: '#FF5733' },
+  { name: 'Transporte', color: '#33A8FF' },
+  { name: 'Moradia', color: '#33FF57' },
+  { name: 'Saúde', color: '#F033FF' },
+  { name: 'Educação', color: '#FF3366' },
+  { name: 'Lazer', color: '#FFBA33' },
+  { name: 'Compra da Shein', color: '#33FFF6' },
+  { name: 'Outros', color: '#B033FF' },
+  { name: 'Salário', color: '#33FF57' },
+  { name: 'Venda', color: '#33A8FF' },
+  { name: 'Investimentos', color: '#FFBA33' },
 ];
 
-export async function initializeGlobalCategories(): Promise<Category[]> {
+export async function initializeGlobalCategories(userId: string): Promise<Category[]> {
   const createdCategories: Category[] = [];
 
   for (const category of globalCategories) {
     try {
       const existing = await findCategoryBy({
         name: category.name,
-        type: category.type,
+        userId: userId,
       });
 
       if (!existing) {
-        const newCategory = await createCategory(category);
+        const newCategory = await createCategory({
+          ...category,
+          userId,
+        });
         console.log(`✅ Criada: ${newCategory.name}`);
         createdCategories.push(newCategory);
       } else {
