@@ -241,7 +241,7 @@ export async function getTransactionSummary(
     if (transaction.type === "INCOME") {
       // Receitas: somar em receita e calcular lucro
       totalRevenue += total;
-      if (transaction.product) {
+      if (transaction.product && transaction.product.costPrice !== null) {
         const profit =
           transaction.quantity *
           (transaction.unitPrice - transaction.product.costPrice);
