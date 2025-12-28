@@ -335,7 +335,7 @@ export async function findManyProducts(filters?: {
   search?: string;
   orderBy?: { name?: "asc" | "desc"; createdAt?: "asc" | "desc" };
 }): Promise<Product[]> {
-  let query = db.select().from(products);
+  const baseQuery = db.select().from(products);
 
   const conditions = [];
 
@@ -357,25 +357,23 @@ export async function findManyProducts(filters?: {
     );
   }
 
-  if (conditions.length > 0) {
-    query = query.where(and(...conditions));
-  }
+  const query = conditions.length > 0
+    ? baseQuery.where(and(...conditions))
+    : baseQuery;
 
   if (filters?.orderBy?.name) {
-    query = query.orderBy(
+    return await query.orderBy(
       filters.orderBy.name === "asc" ? asc(products.name) : desc(products.name)
     );
   } else if (filters?.orderBy?.createdAt) {
-    query = query.orderBy(
+    return await query.orderBy(
       filters.orderBy.createdAt === "asc"
         ? asc(products.createdAt)
         : desc(products.createdAt)
     );
   } else {
-    query = query.orderBy(desc(products.createdAt));
+    return await query.orderBy(desc(products.createdAt));
   }
-
-  return await query;
 }
 
 export async function createProduct(
@@ -497,7 +495,7 @@ export async function findManyVariants(filters?: {
   productId?: string;
   orderBy?: { createdAt?: "asc" | "desc" };
 }): Promise<ProductVariant[]> {
-  let query = db.select().from(productVariants);
+  const baseQuery = db.select().from(productVariants);
 
   const conditions = [];
 
@@ -505,21 +503,19 @@ export async function findManyVariants(filters?: {
     conditions.push(eq(productVariants.productId, filters.productId));
   }
 
-  if (conditions.length > 0) {
-    query = query.where(and(...conditions));
-  }
+  const query = conditions.length > 0
+    ? baseQuery.where(and(...conditions))
+    : baseQuery;
 
   if (filters?.orderBy?.createdAt) {
-    query = query.orderBy(
+    return await query.orderBy(
       filters.orderBy.createdAt === "asc"
         ? asc(productVariants.createdAt)
         : desc(productVariants.createdAt)
     );
   } else {
-    query = query.orderBy(desc(productVariants.createdAt));
+    return await query.orderBy(desc(productVariants.createdAt));
   }
-
-  return await query;
 }
 
 export async function createVariant(
